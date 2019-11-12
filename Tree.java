@@ -1,4 +1,4 @@
-public class Tree
+public class Tree implements Trees
 {
 	private class Node
 	{
@@ -14,7 +14,7 @@ public class Tree
 		}
 	}
 
-	private Node root=null;
+	private Node root = null;
 
 	public void insert(String item)
 	{
@@ -49,6 +49,12 @@ public class Tree
 		if(node.left==null && node.right==null)
 			return node.data;
 
+		if((item.compareTo(node.data)<0) && node.left==null)
+			return node.data;
+
+		if((item.compareTo(node.data)>0) && node.right==null)
+			return node.data;
+
 		if (item.equals(node.data))
 			return node.data;
 
@@ -57,20 +63,5 @@ public class Tree
 
 		else
 			return find(item, node.right);
-	}
-
-	public void print()
-	{
-		print(root);
-	}
-
-	private void print(Node root)
-	{
-		if (root != null)
-		{
-			print(root.left);
-			System.out.println(root.data);
-			print(root.right);
-		}
 	}
 }

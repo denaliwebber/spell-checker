@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.*;
 import java.util.Properties;
 import java.util.Scanner;
 
@@ -9,6 +10,8 @@ public class CS245A1
 		String inputFile = args[0];
 		String outputFile = args[1];
 		String type = "trie";
+		Trees dictionary;
+		String line;
 
 		System.out.println("Reading in configuration file...");
 		Properties prop = new Properties();
@@ -20,52 +23,47 @@ public class CS245A1
 		{
 			prop.load(is);
 			type = prop.getProperty("storage");
-			if (type.equals("trie"))
-			{
-				System.out.println("Storage type: "+type);
-			}
+		}
 
-			else if (type.equals("tree"))
-			{
-				System.out.println("Storage type: "+type);
-			}
-
-			else
-			{
-				System.out.println("Not a valid storage type. Defaulting to trie data structure.");
-			}
+		if (type.equals("tree"))
+		{
+			dictionary = new Tree();
 		}
 
 		else
 		{
-			System.out.println("No configuration file...");
-			System.out.println("Storage type defaults to trie data structure");
+			dictionary = new Trie();
 		}
 
-		Scanner scan_dict = new Scanner(new File("english.0"));
-		String line;
-
-		PrintStream o = new PrintStream(outputFile);
-
-    	PrintStream console = System.out;
-
-    	System.setOut(o);
-
-		if (type.equals("tree"))
+		try
 		{
-			Tree dictionary = new Tree();
-
-			while(scan_dict.hasNextLine())
+    		URL url = new URL("https://raw.githubusercontent.com/magsilva/jazzy/master/resource/dict/english.0");
+        	Scanner scan_dict = new Scanner(url.openStream()); 
+        	while (scan_dict.hasNextLine())
 			{
     			line = scan_dict.nextLine();
     			if (!line.equals(""))
     			{
-    				dictionary.insert(line);
-    				dictionary.print();
-    				System.out.println(line);
+    				dictionary.insert(line.toLowerCase());
     			}
     		}
-		}
+    	}
+
+    	catch(IOException e)
+    	{
+        	e.printStackTrace(); 
+    	}
+
+    	Scanner scan_input = new Scanner(new File(inputFile));
+    	PrintStream o = new PrintStream(outputFile);
+    	PrintStream console = System.out;
+    	System.setOut(o);
+    	
+    	while(scan_input.hasNextLine())
+    	{
+    		line = scan_input.nextLine();
+    		System.out.println(dictionary.find(line.toLowerCase()));
+    	}
     }
 }
 
@@ -73,3 +71,4 @@ public class CS245A1
 //System.setOut(o);
 //to print to console
 //System.setOut(console);
+//Scanner scan_dict = new Scanner(new File("english.0"));
