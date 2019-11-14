@@ -66,9 +66,3 @@ public class CS245A1
     	}
     }
 }
-
-//to print to file
-//System.setOut(o);
-//to print to console
-//System.setOut(console);
-//Scanner scan_dict = new Scanner(new File("english.0"));
